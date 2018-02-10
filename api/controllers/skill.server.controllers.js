@@ -26,11 +26,20 @@ exports.createSkills = (req, res) => {
 
 //get all skills
 exports.getSkills = (req, res) => {
+    let whereCl = {};
+    if (req.query.searchText) {
+       whereCl.name= {
+            like: '%' + req.query.searchText + '%'
+        };
+    }
+    console.log(whereCl);
     Skills.findAll({
-        attributes: ['id', 'name', 'status']
+        attributes: ['id', 'name', 'status'],
+        where: whereCl
     }).then(function(data) {
         return res.send(data);
     }).catch(function(err) {
+        console.log(err);
         return res.send(err);
     });
 }
@@ -85,11 +94,12 @@ exports.changeStatus = (req, res) => {
         return res.status(403).send({
             error: 'Skill id is required'
         });
+        s
     }
 
     let status = req.body.status;
     let skill_id = req.params.skill_id;
-    
+
     Skills.find({
         where: {
             id: skill_id
