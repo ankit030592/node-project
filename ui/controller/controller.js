@@ -93,4 +93,13 @@ app.controller('testController', function($scope, $http) {
                 alert('This skill is ' + (status === 1 ? 'Approved' : 'Rejected'));
             });
     }
+    $scope.data = {};
+    $scope.searchBuyers = function() {
+        $http
+            .get('/api/skills?searchText=' + $scope.data.searchSkill)
+            .then(function(res) {
+                console.log(res);
+                $scope.skillList = res.data;
+            });
+    }
 })
